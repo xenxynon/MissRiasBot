@@ -47,6 +47,7 @@ telegraph
 telethon
 telethon-session-sqlalchemy
 telethon-tgcrypto
+validators
 wikipedia
 youtube-dl
 youtube_search
