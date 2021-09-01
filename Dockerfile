@@ -1,4 +1,4 @@
-FROM akirasupr/RiasBot:debian
+FROM kenhv/kensurbot:debian
 
 RUN set -ex \
     && git clone -b master https://github.com/akirasupr/RiasBot /root/userbot \
