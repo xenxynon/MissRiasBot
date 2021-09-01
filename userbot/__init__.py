@@ -81,7 +81,7 @@ HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
 HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
 
 # Custom (forked) repo URL and BRANCH for updater.
-UPSTREAM_REPO_URL = "https://github.com/KenHV/KensurBot.git"
+UPSTREAM_REPO_URL = "https://github.com/akirasupr/RiasBot"
 UPSTREAM_REPO_BRANCH = "master"
 
 # Console verbose logging

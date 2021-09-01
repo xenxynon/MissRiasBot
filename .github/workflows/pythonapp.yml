@@ -1,4 +1,4 @@
-name: KensurCheck
+name: RiasCheck
 
 on: [push, pull_request]
 

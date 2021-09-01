@@ -1,11 +1,11 @@
 {
-  "name": "KensurBot",
-  "description": "[KensurBot] A modular Telegram userbot running on Python 3.8+ with an sqlalchemy database.",
-  "logo": "#",
+  "name": "RiasBot",
+  "description": "[Rias] A modular Telegram userbot running on Python 3.8+ with an sqlalchemy database.",
+  "logo": "https://telegra.ph/file/64a6c7f87bba9abfe5554.jpg",
   "keywords": ["telegram", "userbot", "plugin", "modular", "productivity"],
-  "repository": "https://github.com/KenHV/KensurBot",
-  "website": "https://kenharris.xyz/userbot.html",
-  "success_url": "https://t.me/KensurOT",
+  "repository": "https://github.com/akirasupr/RiasBot",
+  "website": "#",
+  "success_url": "#",
   "stack": "container",
   "env": {
     "ALIVE_NAME": {
