@@ -12,13 +12,12 @@ from platform import python_version, uname
 from shutil import which
 
 from telethon import version
+from telethon.errors.rpcerrorlist import MediaEmptyError
 
-from userbot import ALIVE_NAME, CMD_HELP, KENSURBOT_VERSION
+import time
+
+from userbot import ALIVE_PIC, ALIVE_NAME, DEFAULTUSER, MENTION, bot, get_readable_time, StartTime, UBOT_VER, CUSTOM_ALIVE_TEXT, CUSTOM_ALIVE_EMOJI, CMD_HELP
 from userbot.events import register
-
-# ================= CONSTANT =================
-DEFAULTUSER = ALIVE_NAME or "Set `ALIVE_NAME` ConfigVar!"
-# ============================================
 
 
 @register(outgoing=True, pattern=r"^\.sysd$")
@@ -125,12 +124,24 @@ async def pipcheck(pip):
 @register(outgoing=True, pattern=r"^\.alive$")
 async def amireallyalive(alive):
     """For .alive command, check if the bot is running."""
-    await alive.edit(
-        f"**KensurBot v{KENSURBOT_VERSION} is up and running!**\n\n"
-        f"**Telethon:** {version.__version__}\n"
-        f"**Python:** {python_version()}\n"
-        f"**User:** {DEFAULTUSER}"
-    )
+    img = ALIVE_PIC
+    uptime = await get_readable_time((time.time() - StartTime))
+    output = (f"{CUSTOM_ALIVE_TEXT}\n\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Usᴇʀ :` {MENTION}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Uᴘᴛɪᴍᴇ :` {uptime}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Pʏᴛʜᴏɴ Vᴇʀsɪᴏɴ :` {python_version()}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Usᴇʀʙᴏᴛ Vᴇʀsɪᴏɴ :` {UBOT_VER}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Tᴇʟᴇᴛʜᴏɴ Vᴇʀsɪᴏɴ :` {version.__version__}\n")
+    if ALIVE_PIC:
+        try:
+            img = ALIVE_PIC
+            pic_alive = await bot.send_file(alive.chat_id, img, caption=output)
+            await alive.delete()
+        except MediaEmptyError:
+            await alive.edit(output + "\n\n *`The provided logo is invalid."
+                             "\nMake sure the link is directed to the logo picture`")
+    else:
+        await alive.edit(output)
 
 
 @register(outgoing=True, pattern=r"^\.aliveu")

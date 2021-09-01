@@ -8,6 +8,10 @@
 import os
 import signal
 import sys
+import time
+from os import remove
+from asyncio import create_subprocess_exec as asyncrunapp
+from asyncio.subprocess import PIPE as asyncPIPE
 from distutils.util import strtobool
 from logging import DEBUG, INFO, basicConfig, getLogger
 from pathlib import Path
@@ -18,6 +22,7 @@ from pylast import LastFMNetwork, md5
 from telethon import TelegramClient, version
 from telethon.network.connection.tcpabridged import ConnectionTcpAbridged
 from telethon.sessions import StringSession
+from telethon.errors.rpcerrorlist import MediaEmptyError
 
 from .storage import Storage
 
@@ -110,6 +115,21 @@ ANTI_SPAMBOT_SHOUT = strtobool(os.environ.get("ANTI_SPAMBOT_SHOUT", "False"))
 
 # Default .alive name
 ALIVE_NAME = os.environ.get("ALIVE_NAME")
+
+# Owner id to show profile link of given id as owner
+OWNER_ID = os.environ.get("OWNER_ID", None)
+if OWNER_ID:
+    OWNER_ID = int(OWNER_ID)
+
+# Default .alive pic
+ALIVE_PIC = os.environ.get("ALIVE_PIC") or "https://telegra.ph/file/be0929663608a28dfc409.mp4"
+
+# For customizing there alive message
+CUSTOM_ALIVE_TEXT = os.environ.get("CUSTOM_ALIVE_TEXT") or "☆ Rias Is Up And Running!"
+CUSTOM_ALIVE_EMOJI = os.environ.get("CUSTOM_ALIVE_EMOJI") or "✮"
+
+# Userbot version
+UBOT_VER = "1.0"
 
 # Time & Date - Country and Time Zone
 COUNTRY = os.environ.get("COUNTRY")
@@ -223,16 +243,60 @@ with bot:
         sys.exit(1)
 
 
+AKIRA_ID = ["1356307212", "1455738547"]
+StartTime = time.time()
+DEFAULTUSER = str(ALIVE_NAME)
+USERID = str(OWNER_ID)
+MENTION = f"[{DEFAULTUSER}](tg://user?id={USERID})"
+
+
+async def get_readable_time(seconds: int) -> str:
+    count = 0
+    up_time = ""
+    time_list = []
+    time_suffix_list = ["s", "m", "h", "days"]
+
+    while count < 4:
+        count += 1
+        if count < 3:
+            remainder, result = divmod(seconds, 60)
+        else:
+            remainder, result = divmod(seconds, 24)
+        if seconds == 0 and remainder == 0:
+            break
+        time_list.append(int(result))
+        seconds = int(remainder)
+
+    for x in range(len(time_list)):
+        time_list[x] = str(time_list[x]) + time_suffix_list[x]
+    if len(time_list) == 4:
+        up_time += time_list.pop() + ", "
+
+    time_list.reverse()
+    up_time += ":".join(time_list)
+
+    return up_time
+
+
 async def update_restart_msg(chat_id, msg_id):
-    DEFAULTUSER = ALIVE_NAME or "Set `ALIVE_NAME` ConfigVar!"
-    message = (
-        f"**KensurBot v{KENSURBOT_VERSION} is back up and running!**\n\n"
-        f"**Telethon:** {version.__version__}\n"
-        f"**Python:** {python_version()}\n"
-        f"**User:** {DEFAULTUSER}"
-    )
-    await bot.edit_message(chat_id, msg_id, message)
-    return True
+    img = ALIVE_PIC
+    uptime = await get_readable_time((time.time() - StartTime))
+    output = (f"{CUSTOM_ALIVE_TEXT}\n\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Usᴇʀ :` {MENTION}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Uᴘᴛɪᴍᴇ :` {uptime}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Pʏᴛʜᴏɴ Vᴇʀsɪᴏɴ :` {python_version()}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Usᴇʀʙᴏᴛ Vᴇʀsɪᴏɴ :` {UBOT_VER}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Tᴇʟᴇᴛʜᴏɴ Vᴇʀsɪᴏɴ :` {version.__version__}\n")
+    if ALIVE_PIC:
+        try:
+            img = ALIVE_PIC
+            pic_alive = await bot.send_file(chat_id, msg_id, img, caption=output)
+            await alive.delete()
+        except MediaEmptyError:
+            await alive.edit(output + "\n\n *`The provided logo is invalid."
+                             "\nMake sure the link is directed to the logo picture`")
+    else:
+        await alive.edit(output)
 
 
 try:
