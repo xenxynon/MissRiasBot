@@ -282,11 +282,11 @@ async def update_restart_msg(chat_id, msg_id):
     img = ALIVE_PIC
     uptime = await get_readable_time((time.time() - StartTime))
     output = (f"{CUSTOM_ALIVE_TEXT}\n\n"
-             f"{CUSTOM_ALIVE_EMOJI} `Usᴇʀ :` {MENTION}\n"
-             f"{CUSTOM_ALIVE_EMOJI} `Uᴘᴛɪᴍᴇ :` {uptime}\n"
-             f"{CUSTOM_ALIVE_EMOJI} `Pʏᴛʜᴏɴ Vᴇʀsɪᴏɴ :` {python_version()}\n"
-             f"{CUSTOM_ALIVE_EMOJI} `Usᴇʀʙᴏᴛ Vᴇʀsɪᴏɴ :` {UBOT_VER}\n"
-             f"{CUSTOM_ALIVE_EMOJI} `Tᴇʟᴇᴛʜᴏɴ Vᴇʀsɪᴏɴ :` {version.__version__}\n")
+             f"{CUSTOM_ALIVE_EMOJI} `User :` {MENTION}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Uptime :` {uptime}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Python :` {python_version()}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `UserBot :` {UBOT_VER}\n"
+             f"{CUSTOM_ALIVE_EMOJI} `Telethon :` {version.__version__}\n")
     if ALIVE_PIC:
         try:
             img = ALIVE_PIC
