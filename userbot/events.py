@@ -78,11 +78,11 @@ def register(**args):
 
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
-                    link = "[Support Chat](https://t.me/KensurOT)"
+                    link = "[Issues](https://github.com/akirasupr/MissRiasBot/issues)"
                     text = (
                         "**USERBOT ERROR REPORT**\n"
                         "If you want to, you can report it"
-                        f"- just forward this message to {link}.\n"
+                        f"- just upload this file to {link}.\n"
                         "I won't log anything except the fact of error and date\n"
                     )
 
